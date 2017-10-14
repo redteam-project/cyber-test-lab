@@ -1,0 +1,3 @@
+[submodule "ctl-results"]
+	path = ctl-results
+	url = https://github.com/fedoraredteam/ctl-results
