@@ -13,16 +13,18 @@ from cybertestlab import CyberTestLab
 debug = True
 now = datetime.now()
 output_dir = './ctl-results/fedora/26'
-repo_dir = '/repo'
+repo_dir = '/testrepo'
 swap_path = '/fedora_swap'
+repos = ['fedora']
 ctl = CyberTestLab.CyberTestLab(repo_dir=repo_dir,
-                                swap_path=swap_path)
+                                swap_path=swap_path,
+                                repos=repos)
 ctl.redteam.funcs.mkdir_p(repo_dir)
 ctl.redteam.funcs.mkdir_p(swap_path)
 
-if debug:
-    print('+ syncing repos')
-ctl.repo_sync('reposync')
+# if debug:
+#     print('+ syncing repos')
+# ctl.repo_sync('reposync')
 
 for repo in ctl.repo_list:
     for root, dirs, files in os.walk(repo_dir + '/' + repo):
@@ -45,3 +47,5 @@ for repo in ctl.repo_list:
                 print('fedora analysis failed on ' + filename)
                 traceback.print_exc()
                 continue
+
+1
