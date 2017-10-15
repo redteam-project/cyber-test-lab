@@ -54,7 +54,7 @@ class CyberTestLab(object):
         # cd = self.redteam.funcs.which('cd')
         rpm2cpio = self.redteam.funcs.which('rpm2cpio')
         cpio = self.redteam.funcs.which('cpio')
-        cmd = '(cd + ' + self.swap_path + ' && ' + rpm2cpio + ' ' + \
+        cmd = '(cd ' + self.swap_path + ' && ' + rpm2cpio + ' ' + \
               rpm + ' | ' + cpio + ' -idm 2>&1 >/dev/null)'
         r = self.redteam.funcs.run_command(cmd, 'rpm2cpio pipe to cpio')
 
