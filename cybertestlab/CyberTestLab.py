@@ -102,8 +102,8 @@ class CyberTestLab(object):
     def scan_elfs(self, rpm, elfs):
         scan_results = {}
         
-        for result in filter(None, elfs.split('\n')):
-            binary = result.split(':')[0]
+        for elf in elfs:
+            binary = elf
             relative_binary = \
                 binary.replace(self.swap_path + '/', '').replace('.', '_')
 
