@@ -182,10 +182,16 @@ class CyberTestLab(object):
         return scan_results
 
     def get_complexity(self, elf):
+        if self.debug:
+            print('+ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
         complexity = 0
         try:
             r2 = r2pipe.open(elf)
+            if self.debug:
+                print('++ starting aaa')
             r2.cmd("aaa")
+            if self.debug:
+                print('++ running analyze function calls complexity (afcc) @main')
             complexity = r2.cmdj("afCc @main")
         except Exception as e:
             if self.debug:
