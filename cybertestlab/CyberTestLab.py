@@ -62,10 +62,10 @@ class CyberTestLab(object):
         rpm_data = {}
         cmd = 'rpm -qip ' + self.swap_path + '/' + rpm
         # this is a list
-        rpm_data['rpm_qip'] = self.redteam.funcs.run_command(cmd, 'rpm -qip')
+        rpm_qip = self.redteam.funcs.run_command(cmd, 'rpm -qip')
 
         not_description, description = \
-            rpm_data['rpm_qip'].split('Description :')
+            rpm_qip.split('Description :')
         raw_metadata = not_description.split('\n')
         metadata = {}
         for line in raw_metadata:
@@ -74,7 +74,7 @@ class CyberTestLab(object):
             k, v = line.split(':', 1)
             metadata[k.rstrip()] = v
         metadata['Description'] = description
-        rpm_data['metadata'] = metadata
+        rpm_data['spec_data'] = metadata
 
         return rpm_data
 
