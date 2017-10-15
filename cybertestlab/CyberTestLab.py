@@ -112,6 +112,8 @@ class CyberTestLab(object):
         scan_results = {}
         
         for elf in elfs:
+            if self.debug:
+                print('++ elf: ' + elf.replace(self.swap_path + '/', ''))
             binary = elf
             relative_binary = \
                 binary.replace(self.swap_path + '/', '').replace('.', '_')
@@ -156,8 +158,13 @@ class CyberTestLab(object):
             )
             hcdashf_clean = []
             for lib in hcdashf:
-                hcdashf_clean.append(lib.split("'")[1])
-            scan_results[relative_binary]['find-libc-functions'] = \
-                hcdashf_clean
+                if len(lib.split("'")) > 1:
+                    hcdashf_clean.append(lib.split("'")[1])
+                    scan_results[relative_binary]['find-libc-functions'] = \
+                        hcdashf_clean
+                else:
+                    if self.debug:
+                        print('+++ ' + elf.replace(self.swap_path + '/', '') +
+                              ' had no `hardening-check -F` output')
 
         return scan_results

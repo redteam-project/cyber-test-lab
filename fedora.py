@@ -44,8 +44,6 @@ for repo in ctl.repo_list:
                 metadata = ctl.get_metadata(filename)
                 elfs = ctl.find_elfs()
                 if elfs:
-                    if debug:
-                        print('+ elfs: ' + ', '.join(elfs))
                     results = ctl.scan_elfs(filename, elfs)
                     results_dir = output_dir + '/' + filename[0]
                     ctl.redteam.funcs.mkdir_p(results_dir)
