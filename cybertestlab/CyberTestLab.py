@@ -97,7 +97,7 @@ class CyberTestLab(object):
         if len(elfs) == 0:
             return None
         else:
-            return elfs
+            return filter(None, elfs)
 
     def scan_elfs(self, rpm, elfs):
         scan_results = {}
