@@ -177,6 +177,8 @@ class CyberTestLab(object):
                         print('+++ ' + elf.replace(self.swap_path + '/', '') +
                               ' had no `hardening-check -F` output')
 
+            scan_results['cyclomatic_complexity'] = self.get_metadata(binary)
+
         return scan_results
 
     def get_complexity(self, elf):
@@ -184,7 +186,7 @@ class CyberTestLab(object):
         try:
             r2 = r2pipe.open(elf)
             r2.cmd("aaa")
-            complexity = r2.cmdj("afcc")
+            complexity = r2.cmdj("afCc @main")
         except Exception as e:
             if self.debug:
                 print('+ get_complexity caught exception: ' + str(e))
