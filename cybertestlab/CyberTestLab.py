@@ -1,5 +1,10 @@
 from redteam import redteam
 
+__author__ = 'Jason Callaway'
+__email__ = 'jasoncallaway@fedoraproject.org'
+__license__ = 'GNU Public License v2'
+__version__ = '0.1'
+__status__ = 'alpha'
 
 class CyberTestLab(object):
     def __init__(self, **kwargs):
