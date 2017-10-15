@@ -177,7 +177,7 @@ class CyberTestLab(object):
                         print('+++ ' + elf.replace(self.swap_path + '/', '') +
                               ' had no `hardening-check -F` output')
 
-            scan_results['cyclomatic_complexity'] = self.get_complexity(binary)
+            scan_results['complexity'] = self.get_complexity(binary)
 
         return scan_results
 
@@ -185,17 +185,27 @@ class CyberTestLab(object):
         if self.debug:
             print('+ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
         complexity = 0
+        cycles_cost = 0
         try:
             r2 = r2pipe.open(elf)
             if self.debug:
-                print('++ starting aaa')
-            r2.cmd("aaa")
-            if self.debug:
-                print('++ running analyze function calls complexity (afcc) @main')
-            complexity = r2.cmdj("afCc @main")
+                print('++ starting aa')
+            r2.cmd("aa")
+            if elf.endswith('.so'):
+                cycles_cost = r2.cmdj('afC @entry')
+                complexity = r2.cmdj('afCc @entry')
+            elif elf.endswith('.a'):
+                complexity = r2.cmdj('afCc')
+            else:
+                cycles_cost = r2.cmdj('afC @main')
+                complexity = r2.cmdj('afCc @main')
         except Exception as e:
             if self.debug:
                 print('+ get_complexity caught exception: ' + str(e))
-            return None
+            return {'r2 aa': 'failed: ' + str(e)}
 
-        return complexity
+        return {'r2 aa':
+                    {'afCc': complexity,
+                     'afC': cycles_cost
+                     }
+                }
