@@ -71,17 +71,20 @@ class CyberTestLab(object):
         # this is a list
         rpm_qip = self.redteam.funcs.run_command(cmd, 'rpm -qip')
 
-        not_description, description = \
-            rpm_qip.split('Description :')
-        raw_metadata = not_description.split('\n')
-        metadata = {}
-        for line in raw_metadata:
-            if line == '':
-                continue
-            k, v = line.split(':', 1)
-            metadata[k.rstrip()] = v
-        metadata['Description'] = description
-        rpm_data['spec_data'] = metadata
+        if len(rpm_qip.split('Description :')) > 1:
+            not_description, description = \
+                rpm_qip.split('Description :')
+            raw_metadata = not_description.split('\n')
+            metadata = {}
+            for line in raw_metadata:
+                if line == '':
+                    continue
+                k, v = line.split(':', 1)
+                metadata[k.rstrip()] = v
+            metadata['Description'] = description
+            rpm_data['spec_data'] = metadata
+        else:
+            rpm_data['Description'] = 'unable to parse `rpm -qip` output'
 
         return rpm_data
 
