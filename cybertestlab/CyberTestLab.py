@@ -51,10 +51,10 @@ class CyberTestLab(object):
         r = self.redteam.funcs.run_command(cmd, 'cp rpm to swap_path')
 
         # crack the rpm open
-        cd = self.redteam.funcs.which('cd')
+        # cd = self.redteam.funcs.which('cd')
         rpm2cpio = self.redteam.funcs.which('rpm2cpio')
         cpio = self.redteam.funcs.which('cpio')
-        cmd = '(' + cd + ' ' + self.swap_path + '&& ' + rpm2cpio + ' ' + \
+        cmd = '(cd + ' + self.swap_path + ' && ' + rpm2cpio + ' ' + \
               rpm + ' | ' + cpio + ' -idm 2>&1 >/dev/null)'
         r = self.redteam.funcs.run_command(cmd, 'rpm2cpio pipe to cpio')
 
@@ -90,7 +90,14 @@ class CyberTestLab(object):
               ' -type f -exec file {} \; | ' + grep + ' -i elf'
         find_results = self.redteam.funcs.run_command(cmd, 'find elfs')
 
-        return find_results
+        elfs = []
+        for result in filter(None, find_results.split('\n')):
+            elfs.append(result.split(':')[0])
+
+        if len(elfs) == 0:
+            return None
+        else:
+            return elfs
 
     def scan_elfs(self, rpm, elfs):
         scan_results = {}
