@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+import os
+import sys
+
+import r2pipe
+
 from redteam import redteam
 
 __author__ = 'Jason Callaway'
@@ -171,3 +178,16 @@ class CyberTestLab(object):
                               ' had no `hardening-check -F` output')
 
         return scan_results
+
+    def get_complexity(self, elf):
+        complexity = 0
+        try:
+            r2 = r2pipe.open(elf)
+            r2.cmd("aaa")
+            complexity = r2.cmdj("afcc")
+        except Exception as e:
+            if self.debug:
+                print('+ get_complexity caught exception: ' + str(e))
+            return None
+
+        return complexity
