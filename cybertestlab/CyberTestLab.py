@@ -6,6 +6,7 @@ __license__ = 'GNU Public License v2'
 __version__ = '0.1'
 __status__ = 'alpha'
 
+
 class CyberTestLab(object):
     def __init__(self, **kwargs):
         self.redteam = redteam.RedTeam(debug=True,
@@ -28,6 +29,8 @@ class CyberTestLab(object):
         self.hardening_check = self.redteam.funcs.which('hardening-check')
         if kwargs.get('hardening_check'):
             self.hardening_check = kwargs['hardening_check']
+        if not self.hardening_check:
+            raise Exception('CyberTestLab: cannot find hardening-check')
 
         self.debug = False
         if kwargs.get('debug'):
