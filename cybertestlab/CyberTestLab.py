@@ -29,6 +29,10 @@ class CyberTestLab(object):
         if kwargs.get('hardening_check'):
             self.hardening_check = kwargs['hardening_check']
 
+        self.debug = False
+        if kwargs.get('debug'):
+            self.debug = kwargs['debug']
+
     def repo_sync(self, command):
         args = ''
         if 'reposync' in command:
@@ -100,6 +104,8 @@ class CyberTestLab(object):
             return filter(None, elfs)
 
     def scan_elfs(self, rpm, elfs):
+        if not elfs:
+            raise Exception('scan_elfs: you gave me an empty list of elfs you dope')
         scan_results = {}
         
         for elf in elfs:

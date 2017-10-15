@@ -24,7 +24,8 @@ swap_path = '/fedora_swap'
 repos = ['fedora']
 ctl = CyberTestLab.CyberTestLab(repo_dir=repo_dir,
                                 swap_path=swap_path,
-                                repos=repos)
+                                repos=repos,
+                                debug=True)
 ctl.redteam.funcs.mkdir_p(repo_dir)
 ctl.redteam.funcs.mkdir_p(swap_path)
 
