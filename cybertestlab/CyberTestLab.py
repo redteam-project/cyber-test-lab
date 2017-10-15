@@ -183,7 +183,7 @@ class CyberTestLab(object):
 
     def get_complexity(self, elf):
         if self.debug:
-            print('+ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
+            print('++ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
         complexity = 0
         cycles_cost = 0
         try:
