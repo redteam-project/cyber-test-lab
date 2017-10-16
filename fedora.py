@@ -40,17 +40,18 @@ for repo in ctl.repo_list:
                 print('+ ' + filename)
             ctl.prep_swap()
             try:
-                ctl.prep_rpm(repo, filename)
-                metadata = ctl.get_metadata(filename)
-                elfs = ctl.find_elfs()
+                results_dir = output_dir + '/' + filename[0]
                 results_file = results_dir + '/' + filename + '.json'
-                if elfs and not os.path.isfile(results_file):
-                    results = ctl.scan_elfs(filename, elfs)
-                    results_dir = output_dir + '/' + filename[0]
-                    ctl.redteam.funcs.mkdir_p(results_dir)
-                    with open(results_file, 'w') as f:
-                        json.dump({'metadata': metadata,
-                                   'results': results}, f, indent=4)
+                if not os.path.isfile(results_file):
+                    ctl.prep_rpm(repo, filename)
+                    metadata = ctl.get_metadata(filename)
+                    elfs = ctl.find_elfs()
+                    if elfs:
+                        results = ctl.scan_elfs(filename, elfs)
+                        ctl.redteam.funcs.mkdir_p(results_dir)
+                        with open(results_file, 'w') as f:
+                            json.dump({'metadata': metadata,
+                                       'results': results}, f, indent=4)
             except Exception as e:
                 print('fedora analysis failed on ' + filename)
                 traceback.print_exc()
