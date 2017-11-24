@@ -131,9 +131,9 @@ class Analysis(object):
         except Exception as e:
             if self.debug:
                 print('+ get_complexity caught exception: ' + str(e))
-            return {'r2 aa': 'failed: ' + str(e)}
+            return {'r2aa': 'failed: ' + str(e)}
 
-        return {'r2 aa':
+        return {'r2aa':
                     {'afCc': complexity,
                      'afC': cycles_cost
                      }
