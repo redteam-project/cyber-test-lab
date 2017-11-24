@@ -7,7 +7,10 @@ from elasticsearch import Elasticsearch
 
 es = Elasticsearch(['http://localhost:9200'])
 
-a = Analysis.Analysis('/usr/bin', debug=True)
+if len(sys.argv) > 1:
+    a = Analysis.Analysis(sys.argv[1], debug=True)
+else:
+    a = Analysis.Analysis('/usr/bin', debug=True)
 
 elfs = a.find_elfs()
 b = a.scan_elfs(elfs)
