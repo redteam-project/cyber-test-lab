@@ -147,3 +147,38 @@ class Analysis(object):
         except Exception as e:
             raise Exception(cmd + ' failed: ' + str(e))
         return results
+
+    def get_complexity(self, elf):
+        if self.debug:
+            print('++ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
+        complexity = 0
+        cycles_cost = 0
+        try:
+            r2 = r2pipe.open(elf)
+            if self.debug:
+                print('++ starting aa')
+            r2.cmd("aa")
+            if elf.endswith('.so'):
+                functions = r2.cmdj('afl')
+                entry = 'entry'
+                for f in functions:
+                    if f.get('name'):
+                        if f['name'] == 'entry0':
+                            entry = 'entry0'
+                cycles_cost = r2.cmdj('afC @' + entry)
+                complexity = r2.cmdj('afCc @' + entry)
+            elif elf.endswith('.a'):
+                complexity = r2.cmdj('afCc')
+            else:
+                cycles_cost = r2.cmdj('afC @main')
+                complexity = r2.cmdj('afCc @main')
+        except Exception as e:
+            if self.debug:
+                print('+ get_complexity caught exception: ' + str(e))
+            return {'r2 aa': 'failed: ' + str(e)}
+
+        return {'r2 aa':
+                    {'afCc': complexity,
+                     'afC': cycles_cost
+                     }
+                }
