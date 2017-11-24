@@ -16,9 +16,9 @@ __status__ = 'alpha'
 class Analysis(object):
     def __init__(self, path, debug=False):
 
-	self.debug = debug
+        self.debug = debug
         self.path = path
-	self.hardening_check = '/usr/bin/hardening-check'
+        self.hardening_check = '/usr/bin/hardening-check'
 
     def find_elfs(self, **kwargs):
         path = self.path
@@ -45,7 +45,7 @@ class Analysis(object):
         if not elfs:
             raise Exception('scan_elfs: you gave me an empty list of elfs you dope')
         scan_results = {}
-        
+
         for elf in elfs:
             if self.debug:
                 print('++ elf: ' + elf.replace(self.path + '/', ''))
