@@ -14,7 +14,7 @@ __status__ = 'alpha'
 
 
 class Analysis(object):
-    def __init__(self, path, debug=False):
+    def __init__(self, path=None, debug=False):
 
         self.debug = debug
         self.path = path
