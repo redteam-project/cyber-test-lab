@@ -21,3 +21,6 @@ from cybertestlab import CyberTestLab
 ```
 
 Or just check out [fedora.py](https://github.com/fedoraredteam/cyber-test-lab/blob/master/fedora.py).
+
+## Tests
+You need to set PYTHONPATH to '.' then run py.test
