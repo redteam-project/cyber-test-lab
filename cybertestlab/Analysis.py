@@ -3,6 +3,7 @@
 import os
 import sys
 import subprocess
+import magic
 
 import r2pipe
 
@@ -26,14 +27,22 @@ class Analysis(object):
             path = kwargs['path']
 
         find_results = []
-        find = '/usr/bin/find'
-        grep = '/usr/bin/grep'
-        cmd = find + ' ' + path + \
-              ' -type f -exec file {} \; | ' + grep + ' -i elf'
-        find_results = self.run_command(cmd)
+
+        rootDir = path
+        for dirName, subdirList, fileList in os.walk(path):
+            for fname in fileList:
+                the_file = os.path.join(path, fname)
+                try:
+                    file_type = magic.from_file(the_file)
+                    if 'ELF' in file_type:
+                        find_results.append(the_file)
+                except:
+                    # Sometimes we fail to read the file for various
+                    # reasons
+                    pass
 
         elfs = []
-        for result in filter(None, find_results.split('\n')):
+        for result in filter(None, find_results):
             elfs.append(result.split(':')[0])
 
         if len(elfs) == 0:
