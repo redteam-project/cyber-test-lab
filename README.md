@@ -40,6 +40,8 @@ docker run --rm -ti -v /home/jason/fctl/fedora27:/repo fctl \
   timeout 600 reposync -d /repo
 ```
 
+Note that if you're using Fedora, RHEL, or a variant, you'll need to add a ```:z``` to the bind mount for SELinux relabeling. I.E., ```-v /home/jason/fctl/fedora27:/repo:z```.
+
 Now you should have some rpms with binaries to analyze. Note that we're using ```timeout``` to sync for 10 minutes to limit disk usage. Remove ```timeout 600``` if you want the whole shebang.
 
 The last step is to create a new run/debug configuration. But there are two tricky parts:
