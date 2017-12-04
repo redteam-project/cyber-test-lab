@@ -1,6 +1,6 @@
 FROM fedora
 
-RUN dnf install -y python-pip git vim gcc make patch ipython yum-utils
+RUN dnf install -y python-pip git vim gcc make patch ipython yum-utils hardening-check
 
 RUN pip install redteam && \
     pip install python-magic

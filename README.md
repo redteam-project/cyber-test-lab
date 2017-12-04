@@ -26,14 +26,21 @@ Then you can configure your [remote interpreter](https://www.jetbrains.com/help/
 
 You've got one step left before you can run the CTL, which is downloading some packages. Since docker containers are ephemeral, you want to mount a local directory into the fctl container before syncing any repos.
 
+On Docker 17.06 or later:
 ```bash
 docker run --rm -ti \
   --mount type=bind,source="~/fctl/fedora27",target=/repo \
   fctl \
-  "timeout 600 reposync -d /repo"
+  timeout 600 reposync -d /repo
 ```
 
-Now you should have some rpms with binaries to analyze.
+On earlier versions:
+```bash
+docker run --rm -ti -v /home/jason/fctl/fedora27:/repo fctl \
+  timeout 600 reposync -d /repo
+```
+
+Now you should have some rpms with binaries to analyze. Note that we're using ```timeout``` to sync for 10 minutes to limit disk usage. Remove ```timeout 600``` if you want the whole shebang.
 
 The last step is to create a new run/debug configuration. But there are two tricky parts:
 
