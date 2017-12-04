@@ -31,7 +31,7 @@ On Docker 17.06 or later:
 docker run --rm -ti \
   --mount type=bind,source="~/fctl/fedora27",target=/repo \
   fctl \
-  timeout 600 reposync -d /repo
+  timeout 600 reposync -p /repo
 ```
 
 On earlier versions:
