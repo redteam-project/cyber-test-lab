@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+import os
+import sys
+
+import r2pipe
+
 from redteam import redteam
 
 __author__ = 'Jason Callaway'
@@ -71,17 +78,20 @@ class CyberTestLab(object):
         # this is a list
         rpm_qip = self.redteam.funcs.run_command(cmd, 'rpm -qip')
 
-        not_description, description = \
-            rpm_qip.split('Description :')
-        raw_metadata = not_description.split('\n')
-        metadata = {}
-        for line in raw_metadata:
-            if line == '':
-                continue
-            k, v = line.split(':', 1)
-            metadata[k.rstrip()] = v
-        metadata['Description'] = description
-        rpm_data['spec_data'] = metadata
+        if len(rpm_qip.split('Description :')) > 1:
+            not_description, description = \
+                rpm_qip.split('Description :')
+            raw_metadata = not_description.split('\n')
+            metadata = {}
+            for line in raw_metadata:
+                if line == '':
+                    continue
+                k, v = line.split(':', 1)
+                metadata[k.rstrip()] = v
+            metadata['Description'] = description
+            rpm_data['spec_data'] = metadata
+        else:
+            rpm_data['Description'] = 'unable to parse `rpm -qip` output'
 
         return rpm_data
 
@@ -167,4 +177,41 @@ class CyberTestLab(object):
                         print('+++ ' + elf.replace(self.swap_path + '/', '') +
                               ' had no `hardening-check -F` output')
 
+            scan_results['complexity'] = self.get_complexity(binary)
+
         return scan_results
+
+    def get_complexity(self, elf):
+        if self.debug:
+            print('++ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
+        complexity = 0
+        cycles_cost = 0
+        try:
+            r2 = r2pipe.open(elf)
+            if self.debug:
+                print('++ starting aa')
+            r2.cmd("aa")
+            if elf.endswith('.so'):
+                functions = r2.cmdj('afl')
+                entry = 'entry'
+                for f in functions:
+                    if f.get('name'):
+                        if f['name'] == 'entry0':
+                            entry = 'entry0'
+                cycles_cost = r2.cmdj('afC @' + entry)
+                complexity = r2.cmdj('afCc @' + entry)
+            elif elf.endswith('.a'):
+                complexity = r2.cmdj('afCc')
+            else:
+                cycles_cost = r2.cmdj('afC @main')
+                complexity = r2.cmdj('afCc @main')
+        except Exception as e:
+            if self.debug:
+                print('+ get_complexity caught exception: ' + str(e))
+            return {'r2 aa': 'failed: ' + str(e)}
+
+        return {'r2 aa':
+                    {'afCc': complexity,
+                     'afC': cycles_cost
+                     }
+                }

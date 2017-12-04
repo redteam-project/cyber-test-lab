@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: install pre requisite packages
+      dnf:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - git
+        - vim
+        - gcc
+        - make
+        - patch
+        - hardening-check
+        - python-pip
+        - python-virtualenv
+        - capstone-python
+        - dnf-utils
+        - cpio
+# Hm, this part seems to be broken
+#    - stat:
+#        path: /root/radare2
+#      register: radare2
+#    - name: download and install radare2
+#      shell: >
+#        cd /root;
+#        git clone https://github.com/radare/radare2.git;
+#        cd radare2;
+#        git checkout tags/2.0.1;
+#        sys/install.sh
+#      when: radare2.stat.isdir is not defined and not radare2.stat.isdir
+    - name: create repo directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - /repo
+        - /fedora_swap
