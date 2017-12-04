@@ -37,7 +37,7 @@ docker run --rm -ti \
 On earlier versions:
 ```bash
 docker run --rm -ti -v /home/jason/fctl/fedora27:/repo fctl \
-  timeout 600 reposync -d /repo
+  timeout 600 reposync -p /repo
 ```
 
 Note that if you're using Fedora, RHEL, or a variant, you'll need to add a ```:z``` to the bind mount for SELinux relabeling. I.E., ```-v /home/jason/fctl/fedora27:/repo:z```.
