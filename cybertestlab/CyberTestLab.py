@@ -17,6 +17,9 @@ __status__ = 'alpha'
 class CyberTestLab(object):
     def __init__(self, **kwargs):
         self.redteam = redteam.RedTeam(debug=True,
+                                       init_trello=False,
+                                       init_sapi=False,
+                                       init_edb=False,
                                        connect_to_trello=False,
                                        cache_dir='~/.redteam')
         self.sapi = redteam.SAPI.SAPI()
