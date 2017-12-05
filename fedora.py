@@ -18,9 +18,12 @@ from cybertestlab import CyberTestLab
 
 debug = True
 now = datetime.now()
-output_dir = './ctl-results/fedora/26'
-repo_dir = '/repo'
-swap_path = '/fedora_swap'
+# output_dir = './ctl-results/fedora/27'
+# repo_dir = '/repo'
+# swap_path = '/fedora_swap'
+output_dir = sys.argv[0]
+repo_dir = sys.argv[1]
+swap_path = sys.argv[2]
 repos = ['fedora']
 ctl = CyberTestLab.CyberTestLab(repo_dir=repo_dir,
                                 swap_path=swap_path,
