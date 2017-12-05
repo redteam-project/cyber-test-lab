@@ -10,7 +10,16 @@ We're targeting end of December 2017 for a beta release.
 
 The CTL code can be executed from within a docker container, making cross-platform development much easier. These instructions assume [PyCharm](https://www.jetbrains.com/pycharm/) is your development environment, but others will work fine too.
 
+<<<<<<< HEAD
 First, set up [PyCharm](https://www.jetbrains.com/pycharm/download/#section=linux) and [Docker](https://docs.docker.com/get-started/) on your system.
+=======
+```python
+# dnf install -y ansible yum
+# ansible-playbook prep_fedora_host.yml
+# virtualenv cyber-test-lab
+# source cyber-test-lab/bin/activate
+# pip install redteam python-magic
+>>>>>>> 17a48fa513e46fbf37fa9b6161796a8d9f06b417
 
 Next, configure PyCharm's Docker plugin. Here's a [tutorial](https://blog.jetbrains.com/pycharm/2015/12/using-docker-in-pycharm/).
 
@@ -34,6 +43,7 @@ docker run --rm -ti \
   timeout 600 reposync -p /repo
 ```
 
+<<<<<<< HEAD
 On earlier versions:
 ```bash
 docker run --rm -ti -v /home/jason/fctl/fedora27:/repo fctl \
@@ -48,4 +58,14 @@ The last step is to create a new run/debug configuration. But there are two tric
 
 1. Be sure to pick the remote docker interpreter under "Python Interpreter"
 2. Mount the repo using Docker Container Image Settings > Volume Bindings. Be sure to use the same mapping as above, i.e., ```/home/jason/fctl/fedora27``` to ```/repo```.
+=======
+Or just check out [fedora.py](https://github.com/fedoraredteam/cyber-test-lab/blob/master/fedora.py).
+
+## Tests
+You need to set PYTHONPATH to '.' then run py.test
+
+## Storing results
+You can use the demo_scan.py script to store the results of a scan in
+elasticsearch. The Elasticsearch python module needs to be installed.
+>>>>>>> 17a48fa513e46fbf37fa9b6161796a8d9f06b417
 
