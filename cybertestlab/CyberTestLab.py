@@ -185,8 +185,6 @@ class CyberTestLab(object):
         return scan_results
 
     def get_complexity(self, elf):
-        if self.debug:
-            print('++ get_complexity getting cyclomatic complexity via r2 for: ' + elf)
         complexity = 0
         cycles_cost = 0
         try:
@@ -211,9 +209,9 @@ class CyberTestLab(object):
         except Exception as e:
             if self.debug:
                 print('+ get_complexity caught exception: ' + str(e))
-            return {'r2 aa': 'failed: ' + str(e)}
+            return {'r2aa': 'failed: ' + str(e)}
 
-        return {'r2 aa':
+        return {'r2aa':
                     {'afCc': complexity,
                      'afC': cycles_cost
                      }
