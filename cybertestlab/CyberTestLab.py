@@ -211,6 +211,7 @@ class CyberTestLab(object):
                 print('+ get_complexity caught exception: ' + str(e))
             return {'r2aa': 'failed: ' + str(e)}
 
+        r2.quit()
         return {'r2aa':
                     {'afCc': complexity,
                      'afC': cycles_cost
