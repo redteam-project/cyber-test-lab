@@ -7,34 +7,56 @@ import traceback
 
 from datetime import datetime
 
+sys.path.append('.')
+from cybertestlab import CyberTestLab
+
 __author__ = 'Jason Callaway'
 __email__ = 'jasoncallaway@fedoraproject.org'
 __license__ = 'GNU Public License v2'
 __version__ = '0.1'
 __status__ = 'alpha'
 
-sys.path.append('.')
-from cybertestlab import CyberTestLab
 
-debug = True
-now = datetime.now()
-output_dir = sys.argv[1]
-repo_dir = sys.argv[2]
-swap_path = sys.argv[3]
-repos = ['fedora']
-ctl = CyberTestLab.CyberTestLab(repo_dir=repo_dir,
-                                swap_path=swap_path,
-                                repos=repos,
-                                debug=True)
-ctl.redteam.funcs.mkdir_p(repo_dir)
-ctl.redteam.funcs.mkdir_p(swap_path)
+def main(argv):
+    debug = True
+    now = datetime.now()
+    output_dir = sys.argv[1]
+    repo_dir = sys.argv[2]
+    swap_path = sys.argv[3]
+    repos = ['fedora']
+    ctl = CyberTestLab.CyberTestLab(repo_dir=repo_dir,
+                                    swap_path=swap_path,
+                                    repos=repos,
+                                    debug=True)
+    ctl.redteam.funcs.mkdir_p(repo_dir)
+    ctl.redteam.funcs.mkdir_p(swap_path)
 
-# if debug:
-#     print('+ syncing repos')
-# ctl.repo_sync('reposync')
+    # if debug:
+    #     print('+ syncing repos')
+    # ctl.repo_sync('reposync')
+
+    for repo in ctl.repo_list:
+        for root, dirs, files in os.walk(repo_dir + '/' + repo):
+            for filename in files:
+                if debug:
+                    print('+ ' + filename)
+                results_dir = output_dir + '/' + filename[0]
+                results_file = results_dir + '/' + filename + '.json'
+                if debug:
+                    print('++ checking for ' + results_file)
+                if not os.path.isfile(results_file):
+                    if debug:
+                        print('++ analyzing ' + filename)
+                    ctl.prep_swap()
+                    try:
+                        analyze(ctl, repo, filename, results_dir, results_file)
+                    except Exception as e:
+                        print('fedora analysis failed on ' + filename)
+                        traceback.print_exc()
+                        continue
 
 
-def analyze(repo, filename, results_dir, results_file):
+def analyze(ctl, repo, filename, results_dir, results_file):
     ctl.prep_rpm(repo, filename)
     metadata = ctl.get_metadata(filename)
     elfs = ctl.find_elfs()
@@ -46,22 +68,5 @@ def analyze(repo, filename, results_dir, results_file):
                        'results': results}, f, indent=4)
 
 
-for repo in ctl.repo_list:
-    for root, dirs, files in os.walk(repo_dir + '/' + repo):
-        for filename in files:
-            results_dir = output_dir + '/' + filename[0]
-            results_file = results_dir + '/' + filename + '.json'
-            if not os.path.isfile(results_file):
-                if debug:
-                    print('+ ' + filename)
-                ctl.prep_swap()
-                try:
-                    analyze(repo, filename)
-                except Exception as e:
-                    print('fedora analysis failed on ' + filename)
-                    traceback.print_exc()
-                    continue
-
-
-
-1
+if __name__ == "__main__":
+    main(sys.argv)
