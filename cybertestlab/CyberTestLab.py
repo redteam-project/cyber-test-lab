@@ -208,7 +208,7 @@ class CyberTestLab(object):
                 complexity = r2.cmdj('afCc @main')
         except Exception as e:
             if self.debug:
-                print('+ get_complexity caught exception: ' + str(e))
+                print('++ get_complexity caught exception: ' + str(e))
             return {'r2aa': 'failed: ' + str(e)}
 
         r2.quit()
