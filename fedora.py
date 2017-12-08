@@ -42,8 +42,6 @@ def main(argv):
                     print('+ ' + filename)
                 results_dir = output_dir + '/' + filename[0]
                 results_file = results_dir + '/' + filename + '.json'
-                if debug:
-                    print('++ checking for ' + results_file)
                 if not os.path.isfile(results_file):
                     if debug:
                         print('++ analyzing ' + filename)
@@ -66,6 +64,10 @@ def analyze(ctl, repo, filename, results_dir, results_file):
         with open(results_file, 'w') as f:
             json.dump({'metadata': metadata,
                        'results': results}, f, indent=4)
+    else:
+        with open(results_file, 'w') as f:
+            json.dump({'metadata': metadata,
+                       'results': 'no elfs found'}, f, indent=4)
 
 
 if __name__ == "__main__":
