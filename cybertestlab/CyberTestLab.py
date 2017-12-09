@@ -180,7 +180,7 @@ class CyberTestLab(object):
                         print('+++ ' + elf.replace(self.swap_path + '/', '') +
                               ' had no `hardening-check -F` output')
 
-            scan_results['complexity'] = self.get_complexity(binary)
+            scan_results[relative_binary]['complexity'] = self.get_complexity(binary)
 
         return scan_results
 
