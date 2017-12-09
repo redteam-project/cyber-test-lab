@@ -9,6 +9,6 @@ RUN cd /root && git clone https://github.com/radare/radare2.git
 
 RUN cd /root/radare2 && git checkout 2.0.1 && ./sys/install.sh
 
-RUN pip install r2pipe
+RUN pip install r2pipe timeout-decorator
 
 RUN mkdir /fedora_swap
