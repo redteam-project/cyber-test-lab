@@ -4,6 +4,7 @@ import os
 import sys
 
 import r2pipe
+import timeout_decorator
 
 from redteam import redteam
 
@@ -184,6 +185,7 @@ class CyberTestLab(object):
 
         return scan_results
 
+    @timeout_decorator.timeout(600)
     def get_complexity(self, elf):
         complexity = 0
         cycles_cost = 0
