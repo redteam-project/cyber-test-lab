@@ -2,10 +2,11 @@
 version:
   date: 20171210
   ctl_version: 0.2
-complexity:
+starting_score: 100
+cyclomatic_complexity:
   mean: 35
   stdev: 59
-  stdev_coefficient: 10
+  stdev_coefficient: -10
 hardening-check:
   Read-only relocations: 
     yes: 0
