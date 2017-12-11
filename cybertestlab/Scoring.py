@@ -32,7 +32,7 @@ class Scoring(object):
                         if self.debug:
                             print('++ scoring ' + abspath)
                         binary_scores = self.score_json(abspath)
-                        if binary_scores is None:
+                        if binary_scores is None or len(binary_scores.keys()) == 0:
                             continue
 
                         bscores = []
