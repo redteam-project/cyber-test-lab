@@ -36,9 +36,8 @@ class Scoring(object):
                             continue
 
                         bscores = []
-                        for b in binary_scores:
-                            for key in b.keys():
-                                bscores.append(b[key])
+                        for binary in binary_scores.keys():
+                            bscores.append(binary_scores[binary])
                         package_score = np.mean(bscores)
 
                         scores[filename] = {"package_score": package_score,
@@ -52,7 +51,7 @@ class Scoring(object):
         if type(jsondata['results']) is unicode:
             return None
 
-        binary_scores = []
+        binary_scores = {}
         binaries = jsondata['results'].keys()
         for binary in binaries:
             if self.debug:
@@ -60,7 +59,7 @@ class Scoring(object):
             score = self.score_binary(jsondata['results'][binary])
             if score is None:
                 continue
-            binary_scores.append({binary: score})
+            binary_scores[binary] = score
 
         return binary_scores
 
