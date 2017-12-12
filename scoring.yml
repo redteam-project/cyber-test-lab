@@ -31,7 +31,7 @@ hardening-check:
     'no': -20
 bad_functions:
   functions:
-    # From MSDN SDL banned funciton calls article, CWE-242, FreeBSD Developers' Handbook
+    # From MSDN SDL banned function calls article, CWE-242, FreeBSD Developers' Handbook
     - ChangeWindowMessageFilter
     - CharToOem
     - CharToOemA
