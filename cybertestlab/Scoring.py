@@ -45,8 +45,11 @@ class Scoring(object):
         return scores
 
     def score_json(self, filename):
-        with open(filename, 'r') as f:
-            jsondata = json.load(f)
+        try:
+            with open(filename, 'r') as f:
+                jsondata = json.load(f)
+        except Exception as e:
+            return None
 
         if type(jsondata['results']) is unicode:
             return None
