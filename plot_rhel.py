@@ -40,11 +40,11 @@ by_binary = '' + \
 print(by_package)
 print(by_binary)
 
-#pfit = stats.norm.pdf(p, np.mean(p), np.std(p))
-#pl.plot(p, pfit, 'o')
-#pl.hist(p, normed=True)
-#pl.text(-134, 0.0125, by_package, fontsize=9)
-#pl.show()
+pfit = stats.norm.pdf(p, np.mean(p), np.std(p))
+pl.plot(p, pfit, 'o')
+pl.hist(p, normed=True)
+pl.text(-200, 0.0125, by_package, fontsize=9)
+pl.show()
 
 # bfit = stats.norm.pdf(b, np.mean(b), np.std(b))
 # pl.plot(b, bfit, 'o')
