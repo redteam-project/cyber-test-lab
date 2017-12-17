@@ -194,16 +194,17 @@ class CyberTestLab(object):
             if self.debug:
                 print('++ starting aa')
             r2.cmd("aa")
-            if elf.endswith('.so'):
-                functions = r2.cmdj('afl')
-                entry = 'entry'
+            if '.so.' in elf or elf.endswith('.so'):
+                ccomplexities = []
+                complexities = []
+                functions = r2.cmdj('aflj')
                 for f in functions:
                     if f.get('name'):
-                        if f['name'] == 'entry0':
-                            entry = 'entry0'
-                cycles_cost = r2.cmdj('afC @' + entry)
-                complexity = r2.cmdj('afCc @' + entry)
-            elif elf.endswith('.a'):
+                        ccomplexities.append(r2.cmd('afCc @' + f['name']))
+                        complexities.append(r2.cmd('afC @' + f['name']))
+                cycles_cost = max(complexities)
+                complexity = max(ccomplexities)
+            elif '.a.' in elf or elf.endswith('.a'):
                 complexity = r2.cmdj('afCc')
             else:
                 cycles_cost = r2.cmdj('afC @main')
