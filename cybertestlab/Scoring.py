@@ -85,19 +85,19 @@ class Scoring(object):
         # handle cyclomatic complexity
         if type(complexity) is not unicode:
             if complexity['afCc'] is not None:
-                c = complexity['afCc']
-                m = complexity_schema['cyclomatic_complexity']['mean']
-                s = complexity_schema['cyclomatic_complexity']['stdev']
-                o = complexity_schema['cyclomatic_complexity']['stdev_coefficient']
+                c = int(complexity['afCc'])
+                m = int(complexity_schema['cyclomatic_complexity']['mean'])
+                s = int(complexity_schema['cyclomatic_complexity']['stdev'])
+                o = int(complexity_schema['cyclomatic_complexity']['stdev_coefficient'])
                 a = (c - m) / s
                 score += a * o
 
             # handle cycle cost
             if complexity['afC'] is not None:
-                c = complexity['afC']
-                m = complexity_schema['cycle_cost']['mean']
-                s = complexity_schema['cycle_cost']['stdev']
-                o = complexity_schema['cycle_cost']['stdev_coefficient']
+                c = int(complexity['afC'])
+                m = int(complexity_schema['cycle_cost']['mean'])
+                s = int(complexity_schema['cycle_cost']['stdev'])
+                o = int(complexity_schema['cycle_cost']['stdev_coefficient'])
                 a = (c - m) / s
                 score += a * o
 
