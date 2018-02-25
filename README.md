@@ -18,7 +18,7 @@ Now it's time to build your CTL container.
 ```bash
 git clone https://github.com/fedoraredteam/cyber-test-lab
 cd cyber-test-lab/docker
-docker built -t fctl .
+docker build -t fctl .
 ```
 
 Then you can configure your [remote interpreter](https://www.jetbrains.com/help/pycharm/configuring-remote-interpreters-via-docker.html) in PyCharm.
