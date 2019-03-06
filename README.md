@@ -1,7 +1,7 @@
 # cyber-test-lab
-Fedora Cyber Test Lab offers quantitative static and dynamic risk analysis of binaries
+Cyber Test Lab offers quantitative static and dynamic risk analysis of binaries
 
-This project is in beta. It can still be hard to get working. Contact [jasoncallaway@fedoraproject.org](matilto:jasoncallaway@fedoraproject.org) for help.
+This project is in beta. It can still be hard to get working. Contact [jasoncallaway@google.com](matilto:jasoncallaway@google.com) for help.
 
 If you're looking for a place to contribute, we need help with documentation! For development contributions, read on.
 
@@ -16,7 +16,7 @@ Next, configure PyCharm's Docker plugin. Here's a [tutorial](https://blog.jetbra
 Now it's time to build your CTL container.
 
 ```bash
-git clone https://github.com/fedoraredteam/cyber-test-lab
+git clone https://github.com/redteam-project/cyber-test-lab
 cd cyber-test-lab/docker
 docker built -t fctl .
 ```
@@ -47,5 +47,3 @@ The last step is to create a new run/debug configuration. But there are two tric
 
 1. Be sure to pick the remote docker interpreter under "Python Interpreter"
 2. Mount the repo using Docker Container Image Settings > Volume Bindings. Be sure to use the same mapping as above, i.e., ```/home/jason/fctl/fedora27``` to ```/repo```.
-
-
