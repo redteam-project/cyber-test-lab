@@ -5,6 +5,9 @@ This project is in beta. It can still be hard to get working. Contact [jasoncall
 
 If you're looking for a place to contribute, we need help with documentation! For development contributions, read on.
 
+## Warning - this is broken
+We're still in the process of migrating this tool from the [old project](https://github.com/fedoraredteam/cyber-test-lab), but we're actively working on fixing it. Check back soon for updates.
+
 ## How to run CTL
 
 The CTL code can be executed from within a docker container, making cross-platform development much easier. These instructions assume [PyCharm](https://www.jetbrains.com/pycharm/) is your development environment, but others will work fine too.
