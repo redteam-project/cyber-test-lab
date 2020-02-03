@@ -6,90 +6,121 @@ steps:
   - '--tag=gcr.io/${PROJECT_ID}/docker:latest'
   - '--file=Dockerfile-cloudbuild'
   - '.'
+  waitFor:
+    - "-"
+  id: builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-archlinux:latest'
     - '--file=archlinux/20200106/Dockerfile'
     - './archlinux/20200106'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-centos6:latest'
     - '--file=centos/6/Dockerfile'
     - './centos/6'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-centos7:latest'
     - '--file=centos/7/Dockerfile'
     - './centos/7'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-centos8:latest'
     - '--file=centos/8/Dockerfile'
     - './centos/8'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-debian8:latest'
     - '--file=debian/8/Dockerfile'
     - './debian/8'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-debian9:latest'
     - '--file=debian/9/Dockerfile'
     - './debian/9'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-ubuntu1604:latest'
     - '--file=ubuntu/1604/Dockerfile'
     - './ubuntu/1604'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-ubuntu1804:latest'
     - '--file=ubuntu/1804/Dockerfile'
     - './ubuntu/1804'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora26:latest'
     - '--file=fedora/26/Dockerfile'
     - './fedora/26'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora27:latest'
     - '--file=fedora/27/Dockerfile'
     - './fedora/27'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora28:latest'
     - '--file=fedora/28/Dockerfile'
     - './fedora/28'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora29:latest'
     - '--file=fedora/29/Dockerfile'
     - './fedora/29'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora30:latest'
     - '--file=fedora/30/Dockerfile'
     - './fedora/30'
+  waitFor:
+    - builder
 - name: 'gcr.io/${PROJECT_ID}/docker'
   args:
     - 'build'
     - '--tag=gcr.io/${PROJECT_ID}/ctl-fedora31:latest'
     - '--file=fedora/31/Dockerfile'
     - './fedora/31'
+  waitFor:
+    - builder
 images:
 - 'gcr.io/${PROJECT_ID}/docker:latest'
 - 'gcr.io/${PROJECT_ID}/ctl-archlinux:latest'
