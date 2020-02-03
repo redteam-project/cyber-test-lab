@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: mirror-monitor-file-updater
+  name: mirror-monitor
 spec:
   schedule: "0 0 * * *"
   jobTemplate:
