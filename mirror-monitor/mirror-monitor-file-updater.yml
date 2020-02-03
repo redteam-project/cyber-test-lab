@@ -1,0 +1,212 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mirror-monitor-file-updater
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: google-cloud-key
+            secret:
+              secretName: ctl-iam
+          containers:
+          - name: ctl-centos6
+            image: gcr.io/red-team-project/ctl-centos6:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: centos
+            - name: MIRROR_VERSION
+              value: "6"
+          - name: ctl-centos7
+            image: gcr.io/red-team-project/ctl-centos7:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: centos
+            - name: MIRROR_VERSION
+              value: "7"
+          - name: ctl-centos8
+            image: gcr.io/red-team-project/ctl-centos8:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: centos
+            - name: MIRROR_VERSION
+              value: "8"
+          - name: ctl-debian8
+            image: gcr.io/red-team-project/ctl-debian8:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: debian
+            - name: MIRROR_VERSION
+              value: "8"
+          - name: ctl-debian9
+            image: gcr.io/red-team-project/ctl-debian9:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: debian
+            - name: MIRROR_VERSION
+              value: "9"
+          - name: ctl-ubuntu1604
+            image: gcr.io/red-team-project/ctl-ubuntu1604:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: ubuntu
+            - name: MIRROR_VERSION
+              value: "1604"
+          - name: ctl-ubuntu1804
+            image: gcr.io/red-team-project/ctl-ubuntu1804:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: ubuntu
+            - name: MIRROR_VERSION
+              value: "1804"
+          - name: ctl-fedora26
+            image: gcr.io/red-team-project/ctl-fedora26:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "26"
+          - name: ctl-fedora27
+            image: gcr.io/red-team-project/ctl-fedora27:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "27"
+          - name: ctl-fedora28
+            image: gcr.io/red-team-project/ctl-fedora28:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "28"
+          - name: ctl-fedora29
+            image: gcr.io/red-team-project/ctl-fedora29:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "29"
+          - name: ctl-fedora30
+            image: gcr.io/red-team-project/ctl-fedora30:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "30"
+          - name: ctl-fedora31
+            image: gcr.io/red-team-project/ctl-fedora31:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: fedora
+            - name: MIRROR_VERSION
+              value: "31"
+          - name: ctl-archlinux
+            image: gcr.io/red-team-project/ctl-archlinux:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
+            - name: MIRROR_OS
+              value: archlinux
+            - name: MIRROR_VERSION
+              value: rolling
+          restartPolicy: Never
