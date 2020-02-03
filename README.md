@@ -5,7 +5,7 @@ This tool is currently being rewritten. For the old version, refer to the [legac
 ## Components
 
 * Kubernetes: the orchestration framework
-* mirror-monitor: monitors Linux distribution mirror sites and copies them to GCS
+* [mirror-monitor](mirror-monitor/mirror-monitor.yml): monitors Linux distribution mirror sites and copies them to GCS
 * mirror-crawler: uses mirror files retrieved by the mirror-monitor to:
 ** crawl mirrors identified by the mirror monitor
 ** create package indices and put them in GCS
