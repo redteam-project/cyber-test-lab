@@ -31,7 +31,7 @@ spec:
             image: gcr.io/red-team-project/ctl-centos7:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -45,7 +45,7 @@ spec:
             image: gcr.io/red-team-project/ctl-centos8:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -59,7 +59,7 @@ spec:
             image: gcr.io/red-team-project/ctl-debian8:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -73,7 +73,7 @@ spec:
             image: gcr.io/red-team-project/ctl-debian9:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -87,7 +87,7 @@ spec:
             image: gcr.io/red-team-project/ctl-ubuntu1604:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -101,7 +101,7 @@ spec:
             image: gcr.io/red-team-project/ctl-ubuntu1804:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -115,7 +115,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora26:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -129,7 +129,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora27:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -143,7 +143,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora28:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -157,7 +157,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora29:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -171,7 +171,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora30:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -185,7 +185,7 @@ spec:
             image: gcr.io/red-team-project/ctl-fedora31:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
@@ -199,7 +199,7 @@ spec:
             image: gcr.io/red-team-project/ctl-archlinux:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/creds.json
