@@ -137,3 +137,6 @@ images:
 - 'gcr.io/${PROJECT_ID}/ctl-fedora29:latest'
 - 'gcr.io/${PROJECT_ID}/ctl-fedora30:latest'
 - 'gcr.io/${PROJECT_ID}/ctl-fedora31:latest'
+timeout: 1800s
+options:
+  machineType: N1_HIGHCPU_32
