@@ -17,10 +17,10 @@ spec:
             image: gcr.io/red-team-project/ctl-centos6:latest
             volumeMounts:
             - name: google-cloud-key
-              mountPath: /var/secrets/google
+              mountPath: /secrets
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -34,7 +34,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -48,7 +48,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -62,7 +62,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -76,7 +76,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -90,7 +90,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -104,7 +104,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -118,7 +118,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -132,7 +132,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -146,7 +146,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -160,7 +160,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -174,7 +174,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -188,7 +188,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
@@ -202,7 +202,7 @@ spec:
               mountPath: /var/secrets/google
             env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /secrets/creds.json
             - name: MIRROR_BUCKET
               value: cyber-test-lab
             - name: MIRROR_OS
