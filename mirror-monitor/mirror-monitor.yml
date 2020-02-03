@@ -209,4 +209,14 @@ spec:
               value: archlinux
             - name: MIRROR_VERSION
               value: rolling
+          - name: ctl-mirror-page
+            image: gcr.io/red-team-project/ctl-archlinux:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /secrets
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/creds.json
+            - name: MIRROR_BUCKET
+              value: cyber-test-lab
           restartPolicy: Never
