@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 export ARCH_MIRROR_PAGE="https://www.archlinux.org/mirrorlist/?country=all&protocol=https&ip_version=4"
 export CENTOS_MIRROR_PAGE="https://centos.org/download/full-mirrorlist.csv"
 export DEBIAN_MIRROR_PAGE="https://www.debian.org/mirror/list"

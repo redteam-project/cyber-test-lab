@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -x
 yum update -y
 source /opt/rh/rh-python35/enable
 gcloud auth activate-service-account --key-file=/secrets/creds.json

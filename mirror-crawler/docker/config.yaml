@@ -1,4 +1,6 @@
 ---
+# This is a really hack-y approach and is only for the initial buildout
+# TODO: nuke this from orbit
 archlinux:
   mirror_lists:
     - gs://cyber-test-lab/mirrors/files/archlinux/rolling/mirrorlist

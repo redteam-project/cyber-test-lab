@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -x
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 gcloud auth activate-service-account --key-file=/secrets/creds.json
