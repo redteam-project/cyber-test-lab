@@ -1,0 +1,44 @@
+---
+archlinux:
+  mirror_lists:
+    - gs://cyber-test-lab/mirrors/files/archlinux/rolling/mirrorlist
+    - gs://cyber-test-lab/mirrors/files/archlinux/rolling/mirrorlist.pacnew
+  sites:
+    - gs://cyber-test-lab/mirrors/files/archlinux/site/arch_mirrors.txt
+centos:
+  mirror_lists:
+    - gs://cyber-test-lab/mirrors/files/centos/6/timedhosts.txt
+    - gs://cyber-test-lab/mirrors/files/centos/7/timedhosts.txt
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-AppStream.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Base.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-CR.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Debuginfo.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Extras.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-HA.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Media.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-PowerTools.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Sources.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-Vault.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-centosplus.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/CentOS-fasttrack.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/epel-modular.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/epel-playground.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/epel-testing-modular.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/epel-testing.repo
+    - gs://cyber-test-lab/mirrors/files/centos/8/yum.repos.d/epel.repo
+  sites:
+    - gs://cyber-test-lab/mirrors/files/centos/site/centos_full-mirrorlist.csv
+debian:
+  mirror_lists:
+    - gs://cyber-test-lab/mirrors/files/debian/8/sources.list
+    - gs://cyber-test-lab/mirrors/files/debian/9/sources.list
+  sites:
+    - gs://cyber-test-lab/mirrors/files/debian/site/debian_mirrors.html
+fedora:
+  mirror_lists:
+    -
+  sites:
+    - gs://cyber-test-lab/mirrors/files/fedora/site/fedora_mirrors.html
+ubuntu:
+  mirror_lists:
+  sites:
