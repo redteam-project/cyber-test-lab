@@ -36,9 +36,44 @@ debian:
     - gs://cyber-test-lab/mirrors/files/debian/site/debian_mirrors.html
 fedora:
   mirror_lists:
-    -
+    - gs://cyber-test-lab/mirrors/files/fedora/26/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/26/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/26/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/26/yum.repos.d/fedora.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/27/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/27/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/27/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/27/yum.repos.d/fedora.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/28/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/28/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/28/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/28/yum.repos.d/fedora.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-updates-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-updates-testing-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/29/yum.repos.d/fedora.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-updates-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-updates-testing-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/30/yum.repos.d/fedora.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-cisco-openh264.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-updates-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-updates-testing-modular.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-updates-testing.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora-updates.repo
+    - gs://cyber-test-lab/mirrors/files/fedora/31/yum.repos.d/fedora.repo
   sites:
     - gs://cyber-test-lab/mirrors/files/fedora/site/fedora_mirrors.html
 ubuntu:
   mirror_lists:
+    - gs://cyber-test-lab/mirrors/files/ubuntu/1604/sources.list
+    - gs://cyber-test-lab/mirrors/files/ubuntu/1804/sources.list
   sites:
+    - gs://cyber-test-lab/mirrors/files/ubuntu/site/ubuntu_mirrors.html
