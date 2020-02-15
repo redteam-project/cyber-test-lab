@@ -1,6 +1,7 @@
 import os
 import magic
 import re
+import yaml
 
 from bs4 import BeautifulSoup
 from google.cloud import storage
@@ -16,16 +17,16 @@ class MirrorCrawler(object):
     }
     self.storage_client = storage.Client()
 
-  def get_blobs(self, path) -> list:
-    bucket_name = self.config['bucket_name'] + '/' + self.config[path]
-    blobs = self.storage_client.list_blobs(bucket_name)
+  def get_blobs(self) -> list:
+    bucket_name = self.config['bucket_name']
+    blobs = self.storage_client.list_blobs(bucket_name,
+                                           prefix=self.config['mirror_files_path'])
     return blobs
 
-  def get_file(self, path, filename, local_path):
-    bucket_name = self.config['bucket_name'] + '/' + self.config[path]
+  def get_file(self, path, blob, local_path):
+    bucket_name = self.config['bucket_name'] + '/' + path
     bucket = self.storage_client.bucket(bucket_name)
-    blob = bucket.blob(filename)
-    blob.download_to_filename(local_path)
+    blob.download_to_filename(local_path + '/' + blob.name.replace('/', '_'))
 
   def get_type(self, local_path) -> str:
     try:
@@ -45,16 +46,16 @@ class MirrorCrawler(object):
 
     return short_type
 
-  def find_mirrors(self) -> list:
-    mirrors = []
+  def find_mirrors(self) -> dict:
+    mirrors = {}
 
     path = self.config['mirror_files_path']
     local_path = self.config['local_path']
-    blobs = self.get_blobs(path)
 
+    blobs = self.get_blobs()
     for blob in blobs:
       self.get_file(path, blob, local_path)
-      filename = local_path + '/' + blob
+      filename = local_path + '/' + blob.name.replace('/', '_')
       file_type = self.get_type(filename)
 
       if file_type == 'html':
@@ -64,7 +65,7 @@ class MirrorCrawler(object):
         for link in links:
           href = link.get('href')
           if href.startswith('http'):
-            mirrors.append(href)
+            mirrors[href] = filename
       elif file_type == 'ascii' or file_type == 'utf-8':
         with open(filename, 'r') as f:
           lines = f.readlines()
@@ -75,7 +76,7 @@ class MirrorCrawler(object):
             link = re.sub(r'(.*)(https?\S*)(\s*)',
                           r'\2',
                           line)
-            mirrors.append(link)
+            mirrors[link] = filename
 
     return mirrors
 
