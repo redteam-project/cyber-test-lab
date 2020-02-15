@@ -1,10 +1,15 @@
-import os
+import datetime
+import json
 import magic
+import os
 import re
 import yaml
 
 from bs4 import BeautifulSoup
+from google.cloud import bigquery
+from google.cloud import container
 from google.cloud import storage
+from google.cloud.exceptions import Conflict
 
 
 class MirrorCrawlerDispatcher(object):
@@ -16,6 +21,9 @@ class MirrorCrawlerDispatcher(object):
        This object is intended to be called by a Kubernetes batch job. It
        assumes the following environment varibles are set:
          GOOGLE_APPLICATION_CREDENTAILS: creds json file for access to GCP APIs
+         PROJECT: GCP project name
+         BQ_DATASET: BigQuery dataset name
+         BQ_TABLE: BigQuery table name
          BUCKET_NAME: the root GCS bucket in which mirror-monitor files can be
                       found
          MIRROR_FILES_PATH: the sub-directory in which the distros' mirror
@@ -28,6 +36,9 @@ class MirrorCrawlerDispatcher(object):
     # note: no need to set GOOGLE_APPLICAION_CREDENTIALS as the google.cloud
     #       look those up on their own
     self.config = {
+      'project': os.environ.get('PROJECT'),
+      'bq_dataset': os.environ.get('BQ_DATASET'),
+      'bq_table': os.environ.get('BQ_TABLE'),
       'bucket_name': os.environ.get('BUCKET_NAME'),
       'mirror_files_path': os.environ.get('MIRROR_FILES_PATH'),
       'local_path': os.environ.get('LOCAL_PATH')
@@ -44,6 +55,9 @@ class MirrorCrawlerDispatcher(object):
 
     # creating the GCS client here for easy reuse
     self.storage_client = storage.Client()
+
+    # create the BQ client for easy reuse
+    self.bq_client = bigquery.Client(project=self.config['project'])
 
   def get_blobs(self) -> list:
     """Recursively get the blobs in GCS
@@ -205,10 +219,98 @@ class MirrorCrawlerDispatcher(object):
 
     return filtered_mirrors
 
+  def udpate_bq(self, mirrors):
+    """Query BQ list of mirrors and first-seen dates. Add any new mirrors.
+
+    Args:
+      mirrors: list of urls
+    """
+    dataset = self.config['bq_dataset']
+    table = self.config['bq_table']
+
+    query = "SELECT " \
+            "  url AS URL, " \
+            "FROM {}.{}".format(dataset, table)
+
+    # get a list of already-seen urls from bq
+    seen_urls = []
+    query_job = self.bq_client.query(query)
+    for row in query_job:
+      u = row['URL']
+      seen_urls.append(u)
+
+    # find the delta
+    new_urls = set(mirrors) - set(seen_urls)
+
+    # now build a query for the new urls
+    if len(new_urls) > 0:
+      # make a timestamp that bq will like
+      now = datetime.datetime.now().isoformat()
+
+      # build a list of urls and timestamps
+      query_data = []
+      for url in new_urls:
+         query_data.append({'url': url, 'first_seen': now})
+
+      # delete the file if it already exists
+      filename = self.config['local_path'] + '/query.json'
+      try:
+        os.unlink(filename)
+      except FileNotFoundError as e:
+        pass
+
+      # now write newline delimited json to the query file
+      with open(filename, 'a') as f:
+        for q in query_data:
+          f.write(json.dumps(q) + '\n')
+
+      # load it into gcs
+      bucket_name = self.config['bucket_name']
+      bucket = self.storage_client.get_bucket(bucket_name)
+
+      # I've noticed that from time to time the GCS upload will fail, so to be
+      # safe we'll retry 3 times
+      keep_trying = True
+      try_count = 0
+      while keep_trying:
+        try:
+          # We don't have to check for existance because upload_from_filename
+          # should clobber existing files
+          blob = bucket.blob('mirror_urls_bq/' + os.path.basename(filename))
+          blob.upload_from_filename(filename)
+          keep_trying = False
+        except Exception as e:
+          # i know, i know
+          # todo: properly catch exceptions here
+          try_count += 1
+          if try_count < 3:
+            pass
+          else:
+            raise e
+
+      # now load the newline delimited json
+      uri = 'gs://' + bucket_name + '/mirror_urls_bq/' + os.path.basename(filename)
+      project = self.config['project']
+      dataset = self.config['bq_dataset']
+      table_name = self.config['bq_table']
+      dataset_ref = bigquery.DatasetReference(project, dataset)
+      job_config = bigquery.LoadJobConfig()
+      job_config.schema = [
+        bigquery.SchemaField("url", "STRING"),
+        bigquery.SchemaField("first_seen", "TIMESTAMP"),
+      ]
+      job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+      load_job = self.bq_client.load_table_from_uri(
+          uri,
+          dataset_ref.table(table_name),
+          job_config=job_config,
+      )
+      load_job.result()
 
 def main():
   mcd = MirrorCrawlerDispatcher()
   mirrors = mcd.find_mirrors()
+  mcd.udpate_bq(mirrors)
   pause = True
 
 

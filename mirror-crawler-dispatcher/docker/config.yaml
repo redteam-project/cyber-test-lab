@@ -2,8 +2,7 @@
 architectures:
   - x86_64
   - i686
-# this is sloppy, we're probably missing a few mirrors who include these domainnames in their
-# directory structure
+# this is sloppy, we're probably missing a few mirrors who include these domainnames in their directory structure
 blacklist:
   - centos.org
   - fedoraproject.org
