@@ -108,3 +108,5 @@ fedora27_scores.json
 rhel7_scores.json
 secrets
 secrets/*
+
+*.DS_Store
