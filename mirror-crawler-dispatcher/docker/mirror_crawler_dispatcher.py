@@ -5,12 +5,11 @@ import os
 import re
 import yaml
 
+import kubernetes
+
 from bs4 import BeautifulSoup
 from google.cloud import bigquery
-from google.cloud import container
 from google.cloud import storage
-from google.cloud.exceptions import Conflict
-
 
 class MirrorCrawlerDispatcher(object):
   """cyber-test-lab mirror-crawler dispatcher"""
@@ -24,6 +23,8 @@ class MirrorCrawlerDispatcher(object):
          PROJECT: GCP project name
          BQ_DATASET: BigQuery dataset name
          BQ_TABLE: BigQuery table name
+         CLUSTER_ID: name of your kube cluster
+         ZONE: GCP zone in which your cluster lives
          BUCKET_NAME: the root GCS bucket in which mirror-monitor files can be
                       found
          MIRROR_FILES_PATH: the sub-directory in which the distros' mirror
@@ -39,6 +40,8 @@ class MirrorCrawlerDispatcher(object):
       'project': os.environ.get('PROJECT'),
       'bq_dataset': os.environ.get('BQ_DATASET'),
       'bq_table': os.environ.get('BQ_TABLE'),
+      'cluster_id': os.environ.get('CLUSTER_ID'),
+      'zone': os.environ.get('ZONE'),
       'bucket_name': os.environ.get('BUCKET_NAME'),
       'mirror_files_path': os.environ.get('MIRROR_FILES_PATH'),
       'local_path': os.environ.get('LOCAL_PATH')
@@ -58,6 +61,11 @@ class MirrorCrawlerDispatcher(object):
 
     # create the BQ client for easy reuse
     self.bq_client = bigquery.Client(project=self.config['project'])
+
+    # create the GKE client
+    self.kube_config = kubernetes.config.load_kube_config()
+    self.kube_client = kubernetes.client.CoreV1Api()
+
 
   def get_blobs(self) -> list:
     """Recursively get the blobs in GCS
@@ -306,6 +314,15 @@ class MirrorCrawlerDispatcher(object):
           job_config=job_config,
       )
       load_job.result()
+
+  def dispatch_pods(self, mirrors):
+    project = self.config['project']
+    cluster_id = self.config['cluster_id']
+    zone = self.config['zone']
+
+    # get a cluster object
+
+
 
 def main():
   mcd = MirrorCrawlerDispatcher()
