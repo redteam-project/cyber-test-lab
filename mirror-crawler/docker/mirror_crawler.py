@@ -1,8 +1,8 @@
 import os
 import magic
+import re
 
 from bs4 import BeautifulSoup
-from google.cloud import bigquery
 from google.cloud import storage
 
 
@@ -47,13 +47,16 @@ class MirrorCrawler(object):
 
   def find_mirrors(self) -> list:
     mirrors = []
+
     path = self.config['mirror_files_path']
     local_path = self.config['local_path']
     blobs = self.get_blobs(path)
+
     for blob in blobs:
       self.get_file(path, blob, local_path)
       filename = local_path + '/' + blob
       file_type = self.get_type(filename)
+
       if file_type == 'html':
         with open(filename, 'r') as f:
           soup = BeautifulSoup(f, 'html.parser')
@@ -62,12 +65,25 @@ class MirrorCrawler(object):
           href = link.get('href')
           if href.startswith('http'):
             mirrors.append(href)
+      elif file_type == 'ascii' or file_type == 'utf-8':
+        with open(filename, 'r') as f:
+          lines = f.readlines()
+        for line in lines:
+          if line.startswith('#'):
+            continue
+          if 'http' in line:
+            link = re.sub(r'(.*)(https?\S*)(\s*)',
+                          r'\2',
+                          line)
+            mirrors.append(link)
 
     return mirrors
 
 
 def main():
-  pass
+  mc = MirrorCrawler()
+  mirrors = mc.find_mirrors()
+  pause = True
 
 if __name__ == '__main__':
   main()
