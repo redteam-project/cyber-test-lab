@@ -1,0 +1,38 @@
+---
+architectures:
+  - x86_64
+  - i686
+# this is sloppy, we're probably missing a few mirrors who include these domainnames in their
+# directory structure
+blacklist:
+  - centos.org
+  - fedoraproject.org
+  - debian.org
+  - ubuntu.org
+  - ubuntu.com
+  - launchpad.net
+  - canonical.com
+  - twitter.com
+  - "httpmirror link"
+distros:
+  archlinux:
+    permutations:
+      - {repo: core, arch: x86_64}
+      - {repo: extra, arch: x86_64}
+      - {repo: pool, arch: x86_64}
+      - {repo: community, arch: x86_64}
+  centos:
+    permutations:
+      - {basearch: x86_64, releasever: 6}
+      - {basearch: x86_64, releasever: 7}
+      - {basearch: x86_64, releasever: 8, infra: os}
+  debian:
+  fedora:
+    permutations:
+      - {basearch: x86_64, releasever: 26}
+      - {basearch: x86_64, releasever: 27}
+      - {basearch: x86_64, releasever: 28}
+      - {basearch: x86_64, releasever: 29}
+      - {basearch: x86_64, releasever: 30}
+      - {basearch: x86_64, releasever: 31}
+  ubuntu:

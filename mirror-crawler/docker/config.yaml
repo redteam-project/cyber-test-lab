@@ -1,9 +1,0 @@
----
-distros:
-  - name: archlinux
-    versions:
-      -
-  - centos
-  - debian
-  - fedora
-  - ubuntu
