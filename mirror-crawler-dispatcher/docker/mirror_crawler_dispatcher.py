@@ -316,7 +316,6 @@ class MirrorCrawlerDispatcher(object):
       load_job.result()
 
   def dispatch_pods(self, mirrors):
-    project = self.config['project']
     cluster_id = self.config['cluster_id']
     zone = self.config['zone']
 
@@ -328,8 +327,7 @@ def main():
   mcd = MirrorCrawlerDispatcher()
   mirrors = mcd.find_mirrors()
   mcd.udpate_bq(mirrors)
-  pause = True
-
+  # mcd.dispatch_pods(mirrors)
 
 if __name__ == '__main__':
   main()
