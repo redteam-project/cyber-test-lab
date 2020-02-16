@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mirror-crawler-dispatcher
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: google-cloud-key
+            secret:
+              secretName: ctl-iam
+          containers:
+          - name: mirror-crawler-dispatcher
+            image: gcr.io/red-team-project/mirror-crawler-dispatcher:latest
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /secrets
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/creds.json
+            - name: PROJECT
+              value: red-team-project
+            - name: BQ_DATASET
+              value: ctl
+            - name: BQ_TABLE
+              value: mirrors
+            - name: CLUSTER_ID
+              value: rtp-cluster-1
+            - name: ZONE
+              value: us-east4
+            - name: BUCKET_NAME
+              value: cyber-test-lab
+            - name: MIRROR_FILES_PATH
+              value: mirrors/files
+            - name: LOCAL_PATH
+              value: /usr/local/temp
+          restartPolicy: Never

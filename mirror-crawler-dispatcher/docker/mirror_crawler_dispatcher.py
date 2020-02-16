@@ -8,8 +8,11 @@ import yaml
 import kubernetes
 
 from bs4 import BeautifulSoup
+from google.auth import compute_engine
+from google.cloud.container_v1 import ClusterManagerClient
 from google.cloud import bigquery
 from google.cloud import storage
+from jinja2 import Template
 
 class MirrorCrawlerDispatcher(object):
   """cyber-test-lab mirror-crawler dispatcher"""
@@ -62,9 +65,9 @@ class MirrorCrawlerDispatcher(object):
     # create the BQ client for easy reuse
     self.bq_client = bigquery.Client(project=self.config['project'])
 
-    # create the GKE client
-    self.kube_config = kubernetes.config.load_kube_config()
-    self.kube_client = kubernetes.client.CoreV1Api()
+    # # create the GKE client
+    # self.kube_config = kubernetes.config.load_kube_config()
+    # self.kube_client = kubernetes.client.CoreV1Api()
 
 
   def get_blobs(self) -> list:
@@ -319,9 +322,36 @@ class MirrorCrawlerDispatcher(object):
     cluster_id = self.config['cluster_id']
     zone = self.config['zone']
 
-    # get a cluster object
+    # load the template spec
+    with open('mirror-crawler.j2', 'r') as f:
+      j2_template = f.read()
 
+    # now for every mirror, fire off a mirror-crawler
+    for mirror in mirrors:
+      job_name = mirror.replace('http://', '').replace('https://', '')
+      mirror_crawler_spec = Template(j2_template).render(job_name=job_name,
+                                                         mirror=mirror)
+      pod_manifest = yaml.safe_load(mirror_crawler_spec)
 
+      project_id = self.config['project']
+      zone = self.config['zone']
+      cluster_id = self.config['cluster_id']
+
+      credentials = compute_engine.Credentials()
+
+      cluster_manager_client = ClusterManagerClient(credentials=credentials)
+      cluster = cluster_manager_client.get_cluster(project_id, zone, cluster_id)
+
+      configuration = kubernetes.client.Configuration()
+      configuration.host = f"https://{cluster.endpoint}:443"
+      configuration.verify_ssl = False
+      configuration.api_key = {"authorization": "Bearer " + credentials.token}
+      kubernetes.client.Configuration.set_default(configuration)
+
+      v1 = kubernetes.client.CoreV1Api()
+      resp = v1.create_namespaced_pod(body=pod_manifest,
+                                      namespace='default')
+      print('[+] started mirror-crawler for ' + job_name)
 
 def main():
   mcd = MirrorCrawlerDispatcher()
