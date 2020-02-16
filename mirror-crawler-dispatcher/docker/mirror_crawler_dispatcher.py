@@ -45,6 +45,7 @@ class MirrorCrawlerDispatcher(object):
       'bq_table': os.environ.get('BQ_TABLE'),
       'cluster_id': os.environ.get('CLUSTER_ID'),
       'zone': os.environ.get('ZONE'),
+      'region': os.environ.get('REGION'),
       'bucket_name': os.environ.get('BUCKET_NAME'),
       'mirror_files_path': os.environ.get('MIRROR_FILES_PATH'),
       'local_path': os.environ.get('LOCAL_PATH')
@@ -146,8 +147,8 @@ class MirrorCrawlerDispatcher(object):
 
       if file_type == 'html':
         # if the file_type is html, let BeautifulSoup find all the links
-        with open(filename, 'r') as f:
-          soup = BeautifulSoup(f, 'html.parser')
+        with open(filename, 'r', encoding='utf-8') as f:
+          soup = BeautifulSoup(f, 'html.parser', from_encoding='utf-8')
         links = soup.find_all('a')
         for link in links:
           href = link.get('href')
@@ -157,8 +158,12 @@ class MirrorCrawlerDispatcher(object):
       elif file_type == 'ascii' or file_type == 'utf-8':
         # if the file is ascii or utf-8 we need to find the links with regexp
 
-        with open(filename, 'r') as f:
-          lines = f.readlines()
+        if file_type == 'utf-8':
+          with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+        else:
+          with open(filename, 'r') as f:
+            lines = f.readlines()
         for line in lines:
           if line.startswith('#'):
             # discard comment lines
@@ -320,28 +325,35 @@ class MirrorCrawlerDispatcher(object):
 
   def dispatch_pods(self, mirrors):
     # load the template spec
-    with open('mirror-crawler.j2', 'r') as f:
+    with open('/usr/local/mirror-crawler.j2', 'r') as f:
       j2_template = f.read()
 
     # now for every mirror, fire off a mirror-crawler
     for mirror in mirrors:
-      job_name = mirror.replace('http://', '').replace('https://', '')
+      job_name = mirror.replace('http://', '').replace('https://', '').replace('/', '-').replace('.', '-').rstrip('-')
       mirror_crawler_spec = Template(j2_template).render(job_name=job_name,
                                                          mirror=mirror)
       pod_manifest = yaml.safe_load(mirror_crawler_spec)
 
       project_id = self.config['project']
       zone = self.config['zone']
+      region = self.config['region']
       cluster_id = self.config['cluster_id']
+      name = 'projects/{}/locations/{}/clusters/{}'.format(project_id,
+                                                           region,
+                                                           cluster_id)
 
       credentials = compute_engine.Credentials()
       credentials.refresh(transport.requests.Request())
 
       cluster_manager_client = ClusterManagerClient(credentials=credentials)
-      cluster = cluster_manager_client.get_cluster(project_id, zone, cluster_id)
+      cluster = cluster_manager_client.get_cluster(project_id,
+                                                   zone,
+                                                   cluster_id,
+                                                   name=name)
 
       configuration = kubernetes.client.Configuration()
-      configuration.host = f"https://{cluster.endpoint}:443"
+      configuration.host = 'https://{}:443'.format(cluster.endpoint)
       configuration.verify_ssl = False
       configuration.api_key = {"authorization": "Bearer " + credentials.token}
       kubernetes.client.Configuration.set_default(configuration)

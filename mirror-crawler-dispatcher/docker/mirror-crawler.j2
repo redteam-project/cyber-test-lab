@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: mirror-crawler-{{ job_name }}
@@ -12,26 +12,26 @@ spec:
         secret:
           secretName: ctl-iam
       containers:
-        - name: mirror-crawler
-          image: gcr.io/red-team-project/mirror-crawler:latest
-          volumeMounts:
-          - name: google-cloud-key
-            mountPath: /secrets
-          env:
-          - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /secrets/creds.json
-          - name: MIRROR
-            value: {{ mirror }}
-          - name: PROJECT
-            value: red-team-project
-          - name: BQ_DATASET
-            value: ctl
-          - name: BQ_TABLE
-            value: files
-          - name: BUCKET_NAME
-            value: cyber-test-lab
-          - name: BUCKET_PATH
-            value: repos/mirror-crawler/repos/
-          - name: LOCAL_PATH
-            value: /usr/local/temp
-      restartPolicy: never
+      - name: mirror-crawler
+        image: gcr.io/red-team-project/mirror-crawler:latest
+        volumeMounts:
+        - name: google-cloud-key
+          mountPath: /secrets
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/creds.json
+        - name: MIRROR
+          value: {{ mirror }}
+        - name: PROJECT
+          value: red-team-project
+        - name: BQ_DATASET
+          value: ctl
+        - name: BQ_TABLE
+          value: files
+        - name: BUCKET_NAME
+          value: cyber-test-lab
+        - name: BUCKET_PATH
+          value: repos/mirror-crawler/repos/
+        - name: LOCAL_PATH
+          value: /usr/local/temp
+      restartPolicy: Never

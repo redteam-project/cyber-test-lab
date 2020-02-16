@@ -30,11 +30,15 @@ spec:
             - name: CLUSTER_ID
               value: rtp-cluster-1
             - name: ZONE
-              value: us-east4
+              value: us-central1-a
+            - name: REGION
+              value: us-central1
             - name: BUCKET_NAME
               value: cyber-test-lab
             - name: MIRROR_FILES_PATH
               value: mirrors/files
             - name: LOCAL_PATH
               value: /usr/local/temp
+            - name: PYTHONIOENCODING
+              value: utf8
           restartPolicy: Never
