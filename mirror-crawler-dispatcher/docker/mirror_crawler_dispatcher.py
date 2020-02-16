@@ -2,6 +2,7 @@ import datetime
 import json
 import magic
 import os
+import sys
 import re
 import yaml
 
@@ -328,39 +329,84 @@ class MirrorCrawlerDispatcher(object):
     with open('/usr/local/mirror-crawler.j2', 'r') as f:
       j2_template = f.read()
 
+    project_id = self.config['project']
+    zone = self.config['zone']
+    region = self.config['region']
+    cluster_id = self.config['cluster_id']
+
+    # the python kubernetes client api does not appear to currently support
+    # regional clusters, so this cronjob needs to be executed against a
+    # zonal cluster. once regional clusters are supported we'll use the
+    # naming convention below
+    name = 'projects/{}/locations/{}/clusters/{}'.format(project_id,
+                                                         region,
+                                                         cluster_id)
+
+    credentials = compute_engine.Credentials()
+    credentials.refresh(transport.requests.Request())
+
+    cluster_manager_client = ClusterManagerClient(credentials=credentials)
+    cluster = cluster_manager_client.get_cluster(project_id,
+                                                 zone,
+                                                 cluster_id,
+                                                 name=name)
+
+    configuration = kubernetes.client.Configuration()
+    configuration.host = 'https://{}:443'.format(cluster.endpoint)
+    configuration.verify_ssl = False
+    configuration.api_key = {"authorization": "Bearer " + credentials.token}
+    kubernetes.client.Configuration.set_default(configuration)
+
+    v1 = kubernetes.client.CoreV1Api()
+
     # now for every mirror, fire off a mirror-crawler
     for mirror in mirrors:
       job_name = mirror.replace('http://', '').replace('https://', '').replace('/', '-').replace('.', '-').rstrip('-')
-      mirror_crawler_spec = Template(j2_template).render(job_name=job_name,
-                                                         mirror=mirror)
-      pod_manifest = yaml.safe_load(mirror_crawler_spec)
+      # mirror_crawler_spec = Template(j2_template).render(job_name=job_name,
+      #                                                    mirror=mirror)
+      # pod_manifest = yaml.safe_load(mirror_crawler_spec)
+      pod_manifest = {
+        'api_version': 'batch/v1',
+        'kind': 'Job',
+        'metadata': {
+          'name': 'mirror-crawler-' + job_name,
+          'labels': {
+            'jobgroup': 'mirror-crawler'
+          },
+        },
+        'spec': {
+          'volumes': [
+            {'name': 'google-cloud-key', 'secret': {'secret_name': 'ctl-iam'}}
+          ],
+          'containers': [
+            {
+              'name': 'mirror-crawler',
+              'image': 'gcr.io/red-team-project/mirror-crawler:latest',
+              'volume_mounts': [
+                {'name': 'google-cloud-key', 'mount_path': '/secrets'}
+              ],
+              'env':[
+                {'name': 'GOOGLE_APPLICATION_CREDENTIALS', 'value': '/secrets/creds.json'},
+                {'name': 'MIRROR', 'value': mirror},
+                {'name': 'PROJECT', 'value': 'red-team-project'},
+                {'name': 'BQ_DATASET', 'value': 'ctl'},
+                {'name': 'BQ_TABLE', 'value': 'files'},
+                {'name': 'BUCKET_NAME', 'value': 'cyber-test-lab'},
+                {'name': 'BUCKET_PATH', 'value': 'repos/mirror-crawler/repos/'},
+                {'name': 'LOCAL_PATH', 'value': '/usr/local/temp'}
+              ]
+            }
+          ],
+          'restart_policy': 'Never'
+        }
+      }
 
-      project_id = self.config['project']
-      zone = self.config['zone']
-      region = self.config['region']
-      cluster_id = self.config['cluster_id']
-      name = 'projects/{}/locations/{}/clusters/{}'.format(project_id,
-                                                           region,
-                                                           cluster_id)
-
-      credentials = compute_engine.Credentials()
-      credentials.refresh(transport.requests.Request())
-
-      cluster_manager_client = ClusterManagerClient(credentials=credentials)
-      cluster = cluster_manager_client.get_cluster(project_id,
-                                                   zone,
-                                                   cluster_id,
-                                                   name=name)
-
-      configuration = kubernetes.client.Configuration()
-      configuration.host = 'https://{}:443'.format(cluster.endpoint)
-      configuration.verify_ssl = False
-      configuration.api_key = {"authorization": "Bearer " + credentials.token}
-      kubernetes.client.Configuration.set_default(configuration)
-
-      v1 = kubernetes.client.CoreV1Api()
-      resp = v1.create_namespaced_pod(body=pod_manifest,
-                                      namespace='default')
+      try:
+        resp = v1.create_namespaced_pod(body=pod_manifest,
+                                        namespace='default')
+      except Exception as e:
+        print('[!] debug pod manifest: ' + str(pod_manifest) + '\n' + str(e))
+        sys.exit(1)
       print('[+] started mirror-crawler for ' + job_name)
 
 def main():

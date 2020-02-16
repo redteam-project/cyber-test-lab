@@ -28,7 +28,7 @@ spec:
             - name: BQ_TABLE
               value: mirrors
             - name: CLUSTER_ID
-              value: rtp-cluster-1
+              value: rtp-cluster-3
             - name: ZONE
               value: us-central1-a
             - name: REGION
