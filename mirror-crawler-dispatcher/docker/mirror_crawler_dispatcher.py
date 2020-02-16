@@ -8,7 +8,7 @@ import yaml
 import kubernetes
 
 from bs4 import BeautifulSoup
-from google.auth import compute_engine
+from google.auth import compute_engine, transport
 from google.cloud.container_v1 import ClusterManagerClient
 from google.cloud import bigquery
 from google.cloud import storage
@@ -335,6 +335,7 @@ class MirrorCrawlerDispatcher(object):
       cluster_id = self.config['cluster_id']
 
       credentials = compute_engine.Credentials()
+      credentials.refresh(transport.requests.Request())
 
       cluster_manager_client = ClusterManagerClient(credentials=credentials)
       cluster = cluster_manager_client.get_cluster(project_id, zone, cluster_id)
