@@ -319,9 +319,6 @@ class MirrorCrawlerDispatcher(object):
       load_job.result()
 
   def dispatch_pods(self, mirrors):
-    cluster_id = self.config['cluster_id']
-    zone = self.config['zone']
-
     # load the template spec
     with open('mirror-crawler.j2', 'r') as f:
       j2_template = f.read()
@@ -357,7 +354,7 @@ def main():
   mcd = MirrorCrawlerDispatcher()
   mirrors = mcd.find_mirrors()
   mcd.udpate_bq(mirrors)
-  # mcd.dispatch_pods(mirrors)
+  mcd.dispatch_pods(mirrors)
 
 if __name__ == '__main__':
   main()
