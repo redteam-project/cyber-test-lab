@@ -1,0 +1,22 @@
+[
+  {
+    "mode": "NULLABLE", 
+    "name": "filename", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "sha256", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "first_mirror", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "first_seen", 
+    "type": "TIMESTAMP"
+  }
+]
