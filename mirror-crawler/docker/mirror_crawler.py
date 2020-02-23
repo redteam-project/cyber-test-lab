@@ -1,8 +1,11 @@
 import os
 import urllib.request
-from urllib.error import ContentTooShortError
+from urllib.error import ContentTooShortError, HTTPError
+from socket import socket
+import ssl
 import hashlib
 import datetime
+import OpenSSL
 
 from bs4 import BeautifulSoup
 from google.cloud import bigquery
@@ -42,16 +45,42 @@ class MirrorCrawler(object):
     return list(filtered_links.keys())
 
   def download(self, url, filename):
+
+    # capture server cert
+    if url.startswith('https'):
+      hostname = url.split('/')[2]
+      cert = ssl.get_server_certificate((hostname, 443))
+      x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
+      server_cert = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM,
+                                                    x509)
+
     try:
       urllib.request.urlretrieve(url, filename)
-    except ContentTooShortError as e:
+    except ssl.SSLError as e:
+      try:
+        context = ssl._create_unverified_context()
+        response = urllib.request.urlopen(url, context=context)
+        data = response.read()
+        with open(filename, 'wb') as f:
+          f.write(data)
+      except Exception as e:
+        raise e
+    except urllib.error.URLError as e:
       raise e
+    except Exception as e:
+      # todo: be more precise with exception handling
+      raise e
+
 
   def mirror(self, url, directory):
     index_path = directory + '/index.html'
 
     links = self.parse(url, index_path)
     for link in links:
+
+      # avoid previous directory links
+      if '/../' in link:
+        continue
       deeper_url = url + '/' + link
 
       if link.endswith('/'):
