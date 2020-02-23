@@ -110,5 +110,6 @@ secrets
 secrets/*
 temp
 temp/*
+test.py
 
 *.DS_Store

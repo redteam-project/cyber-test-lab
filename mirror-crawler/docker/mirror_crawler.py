@@ -86,8 +86,7 @@ class MirrorCrawler(object):
     query_job = self.bq_client.query(query)
     results = query_job.result()
 
-    if results.num_results == 0:
-      pause = True
+    if len(list(results)) == 0:
       now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
       rows_to_insert = [(filename, sha256, url, now)]
       table_id = self.config['project'] + '.' + \
