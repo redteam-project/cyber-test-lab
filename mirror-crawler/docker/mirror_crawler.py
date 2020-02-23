@@ -46,6 +46,9 @@ class MirrorCrawler(object):
 
   def download(self, url, filename):
 
+    server_cert = None
+    cert_valid = None
+
     # capture server cert
     if url.startswith('https'):
       hostname = url.split('/')[2]
@@ -55,9 +58,22 @@ class MirrorCrawler(object):
                                                     x509)
 
     try:
-      urllib.request.urlretrieve(url, filename)
+      cert_valid = True
+      # req = urllib.request.Request(
+      #     url,
+      #     data=None,
+      #     headers={
+      #         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.116 Safari/537.36'
+      #     }
+      # )
+      # urllib.request.urlretrieve(url, filename)
+      response = urllib.request.urlopen(url)
+      data = response.read()
+      with open(filename, 'wb') as f:
+        f.write(data)
     except ssl.SSLError as e:
       try:
+        cert_valid = False
         context = ssl._create_unverified_context()
         response = urllib.request.urlopen(url, context=context)
         data = response.read()
@@ -71,8 +87,9 @@ class MirrorCrawler(object):
       # todo: be more precise with exception handling
       raise e
 
+    return server_cert, cert_valid
 
-  def mirror(self, url, directory):
+  def mirror(self, url, cert, directory):
     index_path = directory + '/index.html'
 
     links = self.parse(url, index_path)
@@ -91,14 +108,14 @@ class MirrorCrawler(object):
           pass
         deeper_directory = directory + '/' + basename
         self.download(deeper_url, deeper_directory + '/index.html')
-        self.mirror(deeper_url, deeper_directory)
+        self.mirror(deeper_url, cert, deeper_directory)
       else:
         basename = link.split('/')[-1]
         path = directory + '/' + basename
         self.download(deeper_url, path)
-        self.process_file(deeper_url, path)
+        self.process_file(deeper_url, cert, path)
 
-  def process_file(self, url, path):
+  def process_file(self, url, cert, path):
     filename = os.path.basename(path)
     with open(path, 'rb') as f:
       file_bytes = f.read()
@@ -117,7 +134,12 @@ class MirrorCrawler(object):
 
     if len(list(results)) == 0:
       now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-      rows_to_insert = [(filename, sha256, url, now)]
+      server_cert = u''
+      if cert[0]:
+        server_cert = cert[0].decode('utf-8')
+      else:
+        server_cert = None
+      rows_to_insert = [(filename, sha256, url, now, server_cert, cert[1])]
       table_id = self.config['project'] + '.' + \
                  self.config['bq_dataset'] + '.' + \
                  self.config['bq_table']
@@ -145,8 +167,8 @@ def main():
   url = os.environ.get('MIRROR')
 
   mc = MirrorCrawler()
-  mc.download(url, mc.config['local_path'] + '/index.html')
-  mc.mirror(url, mc.config['local_path'])
+  server_cert = mc.download(url, mc.config['local_path'] + '/index.html')
+  mc.mirror(url, server_cert, mc.config['local_path'])
 
 
 if __name__ == '__main__':

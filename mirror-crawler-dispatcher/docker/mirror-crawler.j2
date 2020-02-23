@@ -27,11 +27,12 @@ spec:
         - name: BQ_DATASET
           value: ctl
         - name: BQ_TABLE
-          value: mirror-files
+          value: mirror_files
         - name: BUCKET_NAME
           value: cyber-test-lab
         - name: BUCKET_PATH
           value: repos/mirror-crawler/repos/
         - name: LOCAL_PATH
           value: /usr/local/temp
-      restartPolicy: Never
+      restartPolicy: OnFailure
+  backoffLimit: 10
