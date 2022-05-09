@@ -1,4 +1,7 @@
 # cyber-test-lab
+
+**Note that as of May 2022 this project is no longer active.**
+
 Cyber Test Lab offers quantitative static and dynamic risk analysis of binaries
 
 This project is in beta. It can still be hard to get working. Contact [jasoncallaway@google.com](matilto:jasoncallaway@google.com) for help.
